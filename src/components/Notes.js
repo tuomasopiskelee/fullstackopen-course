@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import {getRemoteData} from '../services/getRemoteData';
 
 // const notes = [
 //   { name: "Note A", id: "1" },
@@ -9,22 +10,15 @@ import React, { useState, useEffect, useCallback } from "react";
 function Notes() {
   const [notes, setNotes] = useState([]);
 
-  const fetchNotesHandler = useCallback(async () => {
-    let url = '';
-    if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-      url = "http://localhost:3001/api/notes";
-    } else {
-      url = "/api/notes";
-    }
 
-    const response = await fetch(url);
-    const data = await response.json();
+  const fetchNotesHandler = useCallback(async () => {
+    let data = await getRemoteData("notes");
     setNotes(data);
   });
 
   useEffect(() => {
     fetchNotesHandler();
-  }, [fetchNotesHandler]);
+  }, []);
 
   return (
     <>
