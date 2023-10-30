@@ -1,15 +1,24 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {getRemoteData} from '../services/getRemoteData';
-
-// const notes = [
-//   { name: "Note A", id: "1" },
-//   { name: "Note B", id: "2" },
-//   { name: "Note C", id: "3" },
-// ];
+import { saveRemoteData, getRemoteData } from "../services/fetchRemoteData";
 
 function Notes() {
   const [notes, setNotes] = useState([]);
+  const [newNote, setNewNote] = useState("new note");
 
+  const addNote = (event) => {
+    event.preventDefault();
+    const noteObject = {
+      content: newNote,
+      important: Math.random() > 0.5,
+      id: notes.length + 1,
+    };
+    saveRemoteData("notes", noteObject);
+  };
+
+  const handleNoteChange = (event) => {
+    console.log(event.target.value);
+    setNewNote(event.target.value);
+  };
 
   const fetchNotesHandler = useCallback(async () => {
     let data = await getRemoteData("notes");
@@ -22,9 +31,11 @@ function Notes() {
 
   return (
     <>
-      <p>
-        <button onClick={fetchNotesHandler}>Fetch Notes</button>
-      </p>
+      {/* <button onClick={fetchNotesHandler}>Fetch Notes</button> */}
+      <form onSubmit={addNote}>
+        <input value={newNote} onChange={handleNoteChange} />
+        <button type="submit">save</button>
+      </form>
       {notes && (
         <ul>
           {notes.map((item) => (

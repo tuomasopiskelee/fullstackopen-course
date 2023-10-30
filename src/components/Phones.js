@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {getRemoteData} from '../services/getRemoteData';
+import {getRemoteData} from '../services/fetchRemoteData';
 
 function Phones(){
 
